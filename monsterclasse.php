@@ -1,9 +1,14 @@
 <?php
+
 class Monsters{
     private $name;
     private $strength;
     private $life;
     private $type;
+    
+
+
+
      function getName(){
          return $this->name;
 

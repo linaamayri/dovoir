@@ -2,7 +2,10 @@
 
 require __DIR__ . '/functions.php';
 
-$monsters = getMonsters1();
+//$Monsters = getMonster();
+$statement = $Bdd->prepare('select * from monsters');// utilise prepare pour l'instrection de database 
+$statement->execute();
+$Monsters = $statement->fetchAll(PDO::FETCH_OBJ);//change l'information a donne 
 
 ?>
 
@@ -56,12 +59,12 @@ $monsters = getMonsters1();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($monsters as $monster) { ?>
+                    <?php foreach ($Monsters as $Monster) { ?>
                         <tr>
-                            <td><?php echo $monster->getName(); ?></td>
-                            <td><?php echo $monster->getStrength(); ?></td>
-                            <td><?php echo $monster->getLife(); ?></td>
-                            <td><?php echo $monster->getType(); ?></td>
+                            <td><?php echo $Monster->name; ?></td><!-- recuper les name de Monster  -->
+                            <td><?php echo $Monster->strength; ?></td>
+                            <td><?php echo $Monster->life; ?></td>
+                            <td><?php echo $Monster->type; ?></td>
                         </tr>
                     <?php } ?>
                 </tbody>
@@ -73,8 +76,8 @@ $monsters = getMonsters1();
                         <h2 class="text-center">The battle</h2>
                         <select class=" form-control" name="first_monster_name">
                             <option value="">Choose a Monster</option>
-                            <?php foreach ($monsters as $key => $monster) { ?>
-                                <option value="<?php echo $key; ?>"><?php echo $monster->getName(); ?></option>
+                            <?php foreach ($Monsters as $key => $monster) { ?>
+                                <option value="<?php echo $key; ?>"><?php echo $monster->name; ?></option>
                             <?php } ?>
                         </select>
                         <br>
@@ -82,13 +85,15 @@ $monsters = getMonsters1();
                         <br>
                         <select class="form-control" name="second_monster_name">
                             <option value="">Choose a Monster</option>
-                            <?php foreach ($monsters as $key => $monster) { ?>
-                                <option value="<?php echo $key; ?>"><?php echo $monster->getName(); ?></option>
+                            <?php foreach ($Monsters as $key => $monster) { ?>
+                                <option value="<?php echo $key; ?>"><?php echo $monster->name; ?></option>
                             <?php } ?>
                         </select>
                         <br>
                         <button class="btn btn-md btn-danger center-block" type="submit">Fight!</button>
                     </form>
+                    <form method='POST' action='create.php'><button class="btn btn-md btn-danger center-block" type="submit">CREATE!</button></form><!--pour allez au page create un monster  -->
+
                 </div>
             </div>
         </div>

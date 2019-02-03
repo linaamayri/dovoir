@@ -1,6 +1,38 @@
 <?php
-require __DIR__ .'/monsterclasse.php';
-function getMonsters()
+require __DIR__ . '/monsterclasse.php';
+
+try{//assaye a contect  dans le database
+    $Bdd=new PDO('mysql:host=localhost;dbname=monsters;charset=utf8','lina','lina');//conect a database
+    
+    }catch(Exception $e){
+        die('erreur: '.$e->getMessage());
+    }
+function getMonsters(){
+    try{
+        $Bdd=new PDO('mysql:host=localhost;dbname=monsters;charset=utf8','lina','lina');
+        
+        }catch(Exception $e){
+            die('erreur: '.$e->getMessage());
+        }
+$statement = $Bdd->prepare('select * from monsters');
+$statement->execute();
+$monsters = $statement->fetchAll();
+$data=array();
+foreach($monsters as $monster){
+    $monster1 = new Monsters();
+    $monster1->setName($monster['name']);//enregestre l'information 
+    $monster1->setStrength($monster['strength']);
+    $monster1->setLife($monster['life']);
+    $monster1->setType($monster['type']);
+    $data[] = $monster;
+}
+return $data;
+$response->closeCursor();
+
+}
+ 
+        
+/*function getMonsters()
 {
     return [
         [
@@ -28,8 +60,8 @@ function getMonsters()
             'type' => 'fire'
         ],
     ];
-}
-function getMonsters1(){
+}*/
+/*function getMonsters1(){
     $monster1=new Monsters();
     $monster1->setName('Domovoï');
     $monster1->setStrength('30');
@@ -59,7 +91,7 @@ function getMonsters1(){
 
 
 
-}
+}*/
 
 /**
  * Our complex fighting algorithm!
@@ -70,12 +102,10 @@ function fight(array $firstMonster, array $secondMonster)
 {
     $firstMonsterLife = $firstMonster['life'];
     $secondMonsterLife = $secondMonster['life'];
-
     while ($firstMonsterLife > 0 && $secondMonsterLife > 0) {
         $firstMonsterLife = $firstMonsterLife - $secondMonster['strength'];
         $secondMonsterLife = $secondMonsterLife - $firstMonster['strength'];
     }
-
     if ($firstMonsterLife <= 0 && $secondMonsterLife <= 0) {
         $winner = null;
         $looser = null;
@@ -86,7 +116,6 @@ function fight(array $firstMonster, array $secondMonster)
         $winner = $firstMonster;
         $looser = $secondMonster;
     }
-
     return array(
         'winner' => $winner,
         'looser' => $looser,
